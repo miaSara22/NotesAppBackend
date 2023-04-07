@@ -23,6 +23,8 @@ public class User {
     @GenericGenerator(name = "native", strategy = "native")
     private int userId;
 
+    private Role role;
+
     @NotBlank(message = "Email field cannot be empty!")
     @Email(message = "This email address is not valid!")
     private String email;

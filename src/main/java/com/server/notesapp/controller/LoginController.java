@@ -1,14 +1,15 @@
 package com.server.notesapp.controller;
 
+import com.server.notesapp.config.CustomUserDetails;
 import com.server.notesapp.model.LoginRequest;
 import com.server.notesapp.model.LoginResponse;
-import com.server.notesapp.model.User;
-import com.server.notesapp.service.UserService;
-import com.server.notesapp.utils.JwtUtils;
+import com.server.notesapp.service.CustomUserDetailsService;
+import com.server.notesapp.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,24 +20,30 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @Autowired
-    private UserService userService;
+    private CustomUserDetailsService userDetailsService;
+
     @Autowired
-    private JwtUtils jwtUtils;
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception {
 
-        try{
-            User user = userService.getUserByEmail(loginRequest.getEmail());
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequest.getEmail(), loginRequest.getPwd()));
 
-            if (user != null && BCrypt.checkpw(loginRequest.getPwd(), user.getUserPwd())) {
-                String token = jwtUtils.generateToken(user.getEmail());
-                return ResponseEntity.ok(new LoginResponse(token));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (BadCredentialsException e) {
+            throw new Exception("Wrong email or password", e);
         }
+        final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
+        final String jwtToken = jwtService.generateToken(userDetails);
+
+        return ResponseEntity.ok().body(
+                new LoginResponse(
+                        jwtToken, userDetails.getUsername(), userDetails.getUserFullName())
+        );
     }
 }

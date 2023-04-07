@@ -29,7 +29,7 @@ class NotesApplicationTests {
 		user.setEmail("mia@gmail.com");
 		user.setUserPwd("123");
 		user.setFullName("Mia");
-		userService.save(user);
+		userService.saveUser(user);
 	}
 
 	@Test
