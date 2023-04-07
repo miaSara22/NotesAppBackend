@@ -29,7 +29,7 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
