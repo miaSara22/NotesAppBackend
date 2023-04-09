@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,19 +27,25 @@ public class LoginController {
     private JwtService jwtService;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception {
 
+        String userPwd = passwordEncoder.encode(loginRequest.getPwd());
+        String userEmail = loginRequest.getEmail();
+
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.getEmail(), loginRequest.getPwd()));
+                    userEmail, userPwd));
 
         } catch (BadCredentialsException e) {
             throw new Exception("Wrong email or password", e);
         }
-        final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
+        final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
         final String jwtToken = jwtService.generateToken(userDetails);
 
         return ResponseEntity.ok().body(
