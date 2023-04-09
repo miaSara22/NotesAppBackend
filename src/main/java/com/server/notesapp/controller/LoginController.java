@@ -33,7 +33,7 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
 
         String userPwd = passwordEncoder.encode(loginRequest.getPwd());
         String userEmail = loginRequest.getEmail();
