@@ -1,6 +1,7 @@
 package com.server.notesapp;
 
 import com.server.notesapp.model.Note;
+import com.server.notesapp.model.Role;
 import com.server.notesapp.model.User;
 import com.server.notesapp.service.ListService;
 import com.server.notesapp.service.NoteService;
@@ -26,9 +27,11 @@ class NotesApplicationTests {
 	@Test
 	void addNewUserTest() {
 		User user = new User();
-		user.setEmail("mia@gmail.com");
-		user.setUserPwd("123");
+		user.setEmail("shay@gmail.com");
+		user.setUserPwd("12345");
+		user.setConfirmUserPwd("12345");
 		user.setFullName("Mia");
+		user.setRole(Role.USER);
 		userService.saveUser(user);
 	}
 
