@@ -30,7 +30,7 @@ class NotesApplicationTests {
 		user.setEmail("shay@gmail.com");
 		user.setUserPwd("12345");
 		user.setConfirmUserPwd("12345");
-		user.setFullName("Mia");
+		user.setFullName("shay");
 		user.setRole(Role.USER);
 		userService.saveUser(user);
 	}

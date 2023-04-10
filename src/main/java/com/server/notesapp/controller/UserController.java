@@ -1,11 +1,20 @@
 package com.server.notesapp.controller;
 
+import com.server.notesapp.config.CustomUserDetails;
+import com.server.notesapp.model.LoginRequest;
+import com.server.notesapp.model.LoginResponse;
 import com.server.notesapp.model.RegisterResponse;
 import com.server.notesapp.model.User;
+import com.server.notesapp.service.CustomUserDetailsService;
+import com.server.notesapp.service.JwtService;
 import com.server.notesapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +25,41 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
+    @PostMapping("/login-user")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
+
+        String userPwd = passwordEncoder.encode(loginRequest.getPwd());
+        String userEmail = loginRequest.getEmail();
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    userEmail, userPwd));
+
+        } catch (BadCredentialsException e) {
+            throw new Exception("Wrong email or password", e);
+        }
+        final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+        final String jwtToken = jwtService.generateToken(userDetails);
+
+        return ResponseEntity.ok().body(
+                new LoginResponse(
+                        jwtToken, userDetails.getUsername(), userDetails.getUserFullName())
+        );
+    }
+
     @PostMapping("/save-user")
     public ResponseEntity<RegisterResponse> saveUser(@RequestBody User user) {
         System.out.println(user);
@@ -25,15 +69,9 @@ public class UserController {
         System.out.println(response);
         System.out.println(message);
         if (!success) {
-            throw new RuntimeException("Failed to save user to the database.");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<RegisterResponse> handleRuntimeException(RuntimeException e) {
-        RegisterResponse response = new RegisterResponse(false, e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/get-all-users")
