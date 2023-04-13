@@ -28,8 +28,8 @@ class NotesApplicationTests {
 	void addNewUserTest() {
 		User user = new User();
 		user.setEmail("shay@gmail.com");
-		user.setUserPwd("12345");
-		user.setConfirmUserPwd("12345");
+		user.setPwd("12345");
+		user.setConfirmPwd("12345");
 		user.setFullName("shay");
 		user.setRole(Role.USER);
 		userService.saveUser(user);
@@ -44,7 +44,7 @@ class NotesApplicationTests {
 	@Test
 	void addListTest(){
 		com.server.notesapp.model.List list = new com.server.notesapp.model.List();
-		list.setListName("Songs");
+		list.setTitle("Songs");
 		list.setOwnerId(1);
 		listService.saveList(list, list.getOwnerId());
 	}
@@ -58,8 +58,8 @@ class NotesApplicationTests {
 	@Test
 	void addNoteTest(){
 		Note note = new Note();
-		note.setNoteName("Where have you been");
-		note.setOwnerId(2);
+		note.setTitle("lalala");
+		note.setDescription("By someone");
 		noteService.saveNote(note, note.getOwnerId());
 	}
 

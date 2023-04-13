@@ -25,8 +25,8 @@ public class UserService {
         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
             return false;
         }
-        String hashedPassword = passwordEncoder.encode(user.getUserPwd());
-        user.setUserPwd(hashedPassword);
+        String hashedPassword = passwordEncoder.encode(user.getPwd());
+        user.setPwd(hashedPassword);
 
         try {
             User savedUser = userRepo.save(user);

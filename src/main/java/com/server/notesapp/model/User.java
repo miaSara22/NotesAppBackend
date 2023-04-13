@@ -13,13 +13,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private int userId;
+    private int id;
 
     private Role role;
     private String email;
     private String fullName;
-    private String userPwd;
+    private String image;
+    private String pwd;
 
     @Transient
-    private String confirmUserPwd;
+    private String confirmPwd;
 }

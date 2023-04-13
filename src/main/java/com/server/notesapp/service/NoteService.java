@@ -17,7 +17,7 @@ public class NoteService {
 
     public void saveNote(Note note, int ownerId){
         noteRepo.save(note);
-        noteRepo.setNoteOwnerId(ownerId, note.getNoteId());
+        noteRepo.setNoteOwnerId(ownerId, note.getId());
     }
 
     public void deleteNote(int noteId){

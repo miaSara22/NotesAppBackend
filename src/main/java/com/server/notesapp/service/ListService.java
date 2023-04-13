@@ -16,7 +16,7 @@ public class ListService {
 
     public void saveList(List list, int ownerId){
         listRepo.save(list);
-        listRepo.setListOwnerId(ownerId, list.getListId());
+        listRepo.setListOwnerId(ownerId, list.getId());
 
     }
 
@@ -31,5 +31,5 @@ public class ListService {
         return lists;
     }
 
-    public void updateList( List list, int listId){ listRepo.updateList(list.getListName(), listId); }
+    public void updateList( List list, int listId){ listRepo.updateList(list.getTitle(), listId); }
 }
