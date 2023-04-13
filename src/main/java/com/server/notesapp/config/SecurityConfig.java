@@ -43,10 +43,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/login-user").permitAll()
-                .antMatchers("/save-user").permitAll()
+        http.csrf().disable().authorizeRequests()
+                .antMatchers("/loginUser").permitAll()
+                .antMatchers("/saveUser").permitAll()
+                .antMatchers("/getAllUsers").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
@@ -63,6 +63,8 @@ public class SecurityConfig {
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK));
         return http.build();
     }
+
+
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint(){

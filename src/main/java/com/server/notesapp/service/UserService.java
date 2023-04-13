@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class UserService {
+
+    private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
 
     @Autowired
     private IUserRepo userRepo;
@@ -45,8 +49,11 @@ public class UserService {
 
     public List<User> getAllUsers(){
         List<User> users = new ArrayList<>();
+        LOGGER.log(Level.INFO, "Before findAll() method call");
         Streamable.of(userRepo.findAll())
                 .forEach(users::add);
+        LOGGER.log(Level.INFO, "After findAll() method call");
+        LOGGER.log(Level.INFO, "Users: {0}", users);
         return users;
     }
 

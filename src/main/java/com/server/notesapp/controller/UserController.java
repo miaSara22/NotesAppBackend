@@ -38,7 +38,7 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
 
-    @PostMapping("/login-user")
+    @PostMapping("/loginUser")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
 
         String userPwd = passwordEncoder.encode(loginRequest.getPwd());
@@ -60,7 +60,7 @@ public class UserController {
         );
     }
 
-    @PostMapping("/save-user")
+    @PostMapping("/saveUser")
     public ResponseEntity<RegisterResponse> saveUser(@RequestBody User user) {
         System.out.println(user);
         boolean success = userService.saveUser(user);
@@ -74,12 +74,12 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-users")
+    @GetMapping("/getAllUsers")
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
-    @PostMapping("/delete-user/{userId}")
+    @PostMapping("/deleteUser/{userId}")
     public void deleteUser(@PathVariable int userId){
         userService.deleteUser(userId);
     }

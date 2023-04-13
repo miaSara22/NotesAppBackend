@@ -27,10 +27,10 @@ class NotesApplicationTests {
 	@Test
 	void addNewUserTest() {
 		User user = new User();
-		user.setEmail("shay@gmail.com");
-		user.setPwd("12345");
-		user.setConfirmPwd("12345");
-		user.setFullName("shay");
+		user.setEmail("hola@gmail.com");
+		user.setPwd("123456");
+		user.setConfirmPwd("123456");
+		user.setFullName("hi");
 		user.setRole(Role.USER);
 		userService.saveUser(user);
 	}
