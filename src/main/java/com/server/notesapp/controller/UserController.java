@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,35 +37,31 @@ public class UserController {
 
 
     @PostMapping("/loginUser")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
 
-        String userPwd = passwordEncoder.encode(loginRequest.getPwd());
-        String userEmail = loginRequest.getEmail();
+        boolean success = userService.loginUser(loginRequest);
+        String message = success ? "User logged in successfully" : userService.wrongCredentialsMessage;
 
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    userEmail, userPwd));
-
-        } catch (BadCredentialsException e) {
-            throw new Exception("Wrong email or password", e);
+        if (!success) {
+            LoginResponse response = new LoginResponse(false, message, null, null, null);
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
-        final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-        final String jwtToken = jwtService.generateToken(userDetails);
 
-        return ResponseEntity.ok().body(
-                new LoginResponse(
-                        jwtToken, userDetails.getUsername(), userDetails.getUserFullName())
-        );
+        final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
+        final String jwtToken = jwtService.generateToken(userDetails);
+        LoginResponse response = new LoginResponse(true, message, jwtToken, userDetails.getUsername(), userDetails.getUserFullName());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     @PostMapping("/saveUser")
     public ResponseEntity<RegisterResponse> saveUser(@RequestBody User user) {
-        System.out.println(user);
+
         boolean success = userService.saveUser(user);
-        String message = success ? "User registered successfully" : "Failed to register user";
+        String message = success ? "User registered successfully" : userService.wrongCredentialsMessage;
         RegisterResponse response = new RegisterResponse(success, message);
-        System.out.println(response);
-        System.out.println(message);
+
         if (!success) {
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
