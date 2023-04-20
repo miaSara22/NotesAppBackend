@@ -4,6 +4,8 @@ import com.server.notesapp.service.CustomUserDetailsService;
 import com.server.notesapp.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -32,7 +35,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(AUTH_HEADER);
-
+        if(request.getServletPath().contains("loginUser"))
+            return;
         String username = null;
         String jwtToken = null;
 
