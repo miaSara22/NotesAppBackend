@@ -43,13 +43,13 @@ public class UserController {
         String message = success ? "User logged in successfully" : userService.wrongCredentialsMessage;
 
         if (!success) {
-            LoginResponse response = new LoginResponse(false, message, null, null, null);
+            LoginResponse response = new LoginResponse(false, message, null, 0, null, null);
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
 
         final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
         final String jwtToken = jwtService.generateToken(userDetails);
-        LoginResponse response = new LoginResponse(true, message, jwtToken, userDetails.getUsername(), userDetails.getUserFullName());
+        LoginResponse response = new LoginResponse(true, message, jwtToken, userDetails.getUserId(), userDetails.getUsername(), userDetails.getUserFullName());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 

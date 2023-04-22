@@ -11,15 +11,19 @@ public class LoginResponse {
     private String message;
     @SerializedName("token")
     private final String token;
+
+    @SerializedName("id")
+    private final int id;
     @SerializedName("email")
     private final String email;
     @SerializedName("fullName")
     private final String fullName;
 
-    public LoginResponse(boolean success, String message, String token, String email, String fullName) {
+    public LoginResponse(boolean success, String message, String token, int id, String email, String fullName) {
         this.success = success;
         this.message = message;
         this.token = token;
+        this.id = id;
         this.email = email;
         this.fullName = fullName;
     }
