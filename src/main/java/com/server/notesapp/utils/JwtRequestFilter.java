@@ -35,8 +35,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(AUTH_HEADER);
-        if(request.getServletPath().contains("loginUser"))
+        if(request.getRequestURI().contains("/loginUser") || request.getRequestURI().contains("/saveUser")) {
+            chain.doFilter(request, response);
             return;
+        }
+
         String username = null;
         String jwtToken = null;
 
@@ -64,5 +67,3 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 }
-
-

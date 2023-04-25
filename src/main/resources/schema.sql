@@ -11,11 +11,7 @@ CREATE TABLE IF NOT EXISTS `notes` (
 );
 --
 CREATE TABLE IF NOT EXISTS `lists` (
-  `list_id` int NOT NULL AUTO_INCREMENT,
-  `owner_id` int NOT NULL,
-  `list_name` varchar(30) NOT NULL,
-  PRIMARY KEY(`list_id`)
---FOREIGN KEY(`owner_id`) REFERENCES users(user_id)
+
 );
 
 CREATE TABLE IF NOT EXISTS `users` (

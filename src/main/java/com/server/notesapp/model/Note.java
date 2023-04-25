@@ -15,7 +15,10 @@ public class Note {
     @GenericGenerator(name = "native", strategy = "native")
     private int id;
 
-    private int ownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private List owner;
+
     private String title;
     private String description;
 }

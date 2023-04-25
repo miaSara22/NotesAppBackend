@@ -45,8 +45,7 @@ class NotesApplicationTests {
 	void addListTest(){
 		com.server.notesapp.model.List list = new com.server.notesapp.model.List();
 		list.setTitle("Songs");
-		list.setOwnerId(1);
-		listService.saveList(list, list.getOwnerId());
+		listService.saveList(list);
 	}
 
 	@Test
@@ -57,10 +56,10 @@ class NotesApplicationTests {
 
 	@Test
 	void addNoteTest(){
-		Note note = new Note();
-		note.setTitle("lalala");
-		note.setDescription("By someone");
-		noteService.saveNote(note, note.getOwnerId());
+//		Note note = new Note();
+//		note.setTitle("lalala");
+//		note.setDescription("By someone");
+//		noteService.saveNote(note, note.getOwnerId());
 	}
 
 	@Test

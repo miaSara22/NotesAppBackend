@@ -14,9 +14,12 @@ public class ListService {
     @Autowired
     private IListRepo listRepo;
 
-    public void saveList(List list, int ownerId){
+
+    @Autowired
+    private UserService userService;
+
+    public void saveList(List list){
         listRepo.save(list);
-        listRepo.setListOwnerId(ownerId, list.getId());
 
     }
 
@@ -31,5 +34,6 @@ public class ListService {
         return lists;
     }
 
-    public void updateList( List list, int listId){ listRepo.updateList(list.getTitle(), listId); }
+    public void updateList(List list, int listId){ listRepo.updateList(list.getTitle(), listId); }
+
 }

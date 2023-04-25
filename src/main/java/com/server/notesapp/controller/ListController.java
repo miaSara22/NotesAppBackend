@@ -11,17 +11,17 @@ public class ListController {
     @Autowired
     private ListService listService;
 
-    @PostMapping("/save-list/{ownerId}")
-    public void saveList(@RequestBody List list, @PathVariable int ownerId){
-        listService.saveList(list, ownerId);
+    @PostMapping("/saveList")
+    public void saveList(@RequestBody List list){
+        listService.saveList(list);
     }
 
-    @PostMapping("/delete-list/{listId}")
+    @PostMapping("/deleteList/{listId}")
     public void deleteList(@PathVariable int listId){
         listService.deleteList(listId);
     }
 
-    @GetMapping("/get-lists/{ownerId}")
+    @GetMapping("/getLists/{ownerId}")
     public java.util.List<List> getLists(@PathVariable int ownerId){
         return listService.getLists(ownerId);
     }

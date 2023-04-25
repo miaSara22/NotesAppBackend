@@ -11,6 +11,7 @@ import com.server.notesapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,7 @@ public class UserController {
 
 
     @PostMapping("/loginUser")
+    @Secured("permitAll")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
 
         boolean success = userService.loginUser(loginRequest);
@@ -56,6 +58,7 @@ public class UserController {
     }
 
     @PostMapping("/saveUser")
+    @Secured("permitAll")
     public ResponseEntity<RegisterResponse> saveUser(@RequestBody User user) {
 
         boolean success = userService.saveUser(user);
