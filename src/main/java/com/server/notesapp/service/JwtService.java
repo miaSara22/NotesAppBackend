@@ -63,7 +63,7 @@ public class JwtService {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, key).compact();
+                .signWith(SignatureAlgorithm.HS512, key).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
