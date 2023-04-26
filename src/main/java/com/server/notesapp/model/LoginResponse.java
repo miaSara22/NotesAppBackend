@@ -6,12 +6,10 @@ public class LoginResponse {
 
     @SerializedName("success")
     private boolean success;
-
     @SerializedName("message")
     private String message;
     @SerializedName("token")
     private final String token;
-
     @SerializedName("id")
     private final int id;
     @SerializedName("email")
@@ -51,6 +49,8 @@ public class LoginResponse {
     public String getEmail() {
         return email;
     }
+
+    public int getId() { return id; }
 
     public String getFullName() {
         return fullName;

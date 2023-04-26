@@ -25,15 +25,6 @@ public class NoteService {
         try {
             Optional<com.server.notesapp.model.List> owner = listRepo.findById(ownerId);
 
-            if (owner.isPresent()) {
-                Note newNote = new Note();
-                newNote.setId(note.getId());
-                newNote.setOwner(owner.get());
-                newNote.setTitle(note.getTitle());
-                newNote.setDescription(newNote.getDescription());
-                noteRepo.save(newNote);
-                return true;
-            }
 
         } catch (Exception e) {
             throw new RuntimeException("Error saving note to database", e);

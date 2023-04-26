@@ -44,8 +44,8 @@ class NotesApplicationTests {
 	@Test
 	void addListTest(){
 		com.server.notesapp.model.List list = new com.server.notesapp.model.List();
-		list.setOwner(userService.getAllUsers().get(0));
-		list.setTitle("Songs");
+		list.setOwnerId(4);
+		list.setTitle("Shir");
 		listService.saveList(list);
 	}
 
