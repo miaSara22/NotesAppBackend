@@ -2,6 +2,7 @@ package com.server.notesapp.service;
 
 import com.server.notesapp.model.List;
 import com.server.notesapp.repository.IListRepo;
+import com.server.notesapp.repository.INoteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.util.Streamable;
@@ -16,6 +17,9 @@ public class ListService {
 
     @Autowired
     private IListRepo listRepo;
+
+    @Autowired
+    private INoteRepo noteRepo;
 
 
     @Autowired
@@ -39,6 +43,7 @@ public class ListService {
     public boolean deleteList(List list){
         try {
             listRepo.deleteById(list.getId());
+            noteRepo.deleteNotes(list.getId());
         } catch (Exception e){
             throw new RuntimeException("Failed to delete list", e);
         }

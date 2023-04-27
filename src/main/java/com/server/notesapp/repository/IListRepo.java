@@ -13,7 +13,8 @@ import java.util.Optional;
 @Repository
 public interface IListRepo extends JpaRepository<List, Integer> {
 
-    java.util.List<List> findByOwnerId(int ownerId);
+    @Query(value = "SELECT * FROM lists WHERE owner_id = :ownerId", nativeQuery = true)
+    java.util.List<List> findByOwnerId(@Param("ownerId") int ownerId);
 
     Optional<List> findById(Integer id);
 
