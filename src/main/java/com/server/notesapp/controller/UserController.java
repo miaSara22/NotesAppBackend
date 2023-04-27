@@ -3,7 +3,7 @@ package com.server.notesapp.controller;
 import com.server.notesapp.config.CustomUserDetails;
 import com.server.notesapp.model.LoginRequest;
 import com.server.notesapp.model.LoginResponse;
-import com.server.notesapp.model.RegisterResponse;
+import com.server.notesapp.model.ResultResponse;
 import com.server.notesapp.model.User;
 import com.server.notesapp.service.CustomUserDetailsService;
 import com.server.notesapp.service.JwtService;
@@ -59,16 +59,16 @@ public class UserController {
 
     @PostMapping("/saveUser")
     @Secured("permitAll")
-    public ResponseEntity<RegisterResponse> saveUser(@RequestBody User user) {
+    public ResponseEntity<ResultResponse> saveUser(@RequestBody User user) {
 
         boolean success = userService.saveUser(user);
         String message = success ? "User registered successfully" : userService.wrongCredentialsMessage;
-        RegisterResponse response = new RegisterResponse(success, message);
+        ResultResponse resultResponse = new ResultResponse(success, message);
 
         if (!success) {
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(resultResponse, HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 
     @GetMapping("/getAllUsers")
@@ -76,8 +76,16 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/deleteUser/{userId}")
-    public void deleteUser(@PathVariable int userId){
-        userService.deleteUser(userId);
+    @PostMapping("/deleteUser")
+    public ResponseEntity<ResultResponse> deleteUser(@RequestBody User user){
+
+        boolean success =  userService.deleteUser(user);
+        String message = success ? "User deleted successfully" : "Failed to delete user";
+        ResultResponse resultResponse = new ResultResponse(success, message);
+
+        if (!success) {
+            return new ResponseEntity<>(resultResponse, HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
     }
 }

@@ -19,11 +19,6 @@ public interface IListRepo extends JpaRepository<List, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE lists SET owner_id = :ownerId WHERE list_id = :listId", nativeQuery = true)
-    void setListOwnerId(@Param("ownerId") int ownerId, @Param("listId") int listId);
-
-    @Modifying
-    @Transactional
-    @Query(value = "Update lists SET list_name = :listName WHERE list_id = :listId", nativeQuery = true)
+    @Query(value = "Update lists SET title = :listName WHERE id = :listId", nativeQuery = true)
     void updateList(@Param("listName") String listName, @Param("listId") int listId);
 }

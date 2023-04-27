@@ -13,7 +13,8 @@ public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private int ownerId;
+    private Integer id;
+    private Integer ownerId;
     private String title;
     private String description;
 }

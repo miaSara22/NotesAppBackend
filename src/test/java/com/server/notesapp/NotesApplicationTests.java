@@ -57,10 +57,11 @@ class NotesApplicationTests {
 
 	@Test
 	void addNoteTest(){
-//		Note note = new Note();
-//		note.setTitle("lalala");
-//		note.setDescription("By someone");
-//		noteService.saveNote(note, note.getOwnerId());
+		Note note = new Note();
+		note.setTitle("lalala");
+		note.setDescription("By someone");
+		note.setOwnerId(8);
+		noteService.saveNote(note);
 	}
 
 	@Test

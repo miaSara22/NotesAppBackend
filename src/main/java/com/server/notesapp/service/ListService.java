@@ -3,6 +3,7 @@ package com.server.notesapp.service;
 import com.server.notesapp.model.List;
 import com.server.notesapp.repository.IListRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 @Service
 public class ListService {
 
+    public String wrongCredentialsMessage;
+
     @Autowired
     private IListRepo listRepo;
 
@@ -18,13 +21,28 @@ public class ListService {
     @Autowired
     private UserService userService;
 
-    public void saveList(List list){
-        listRepo.save(list);
+    public boolean saveList(List list){
 
+        if (list.getTitle().isEmpty()) {
+            wrongCredentialsMessage = "List name cannot be empty";
+            return false;
+        }
+        try {
+            listRepo.save(list);
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Failed to save list", e);
+        }
+        return true;
     }
 
-    public void deleteList(int listId){
-        listRepo.deleteById(listId);
+    public boolean deleteList(List list){
+        try {
+            listRepo.deleteById(list.getId());
+        } catch (Exception e){
+            throw new RuntimeException("Failed to delete list", e);
+        }
+        return true;
     }
 
     public java.util.List<List> getLists(int ownerId){
@@ -34,6 +52,12 @@ public class ListService {
         return lists;
     }
 
-    public void updateList(List list, int listId){ listRepo.updateList(list.getTitle(), listId); }
-
+    public boolean updateList(List list){
+        try {
+            listRepo.updateList(list.getTitle(), list.getId());
+        }catch (Exception e){
+            throw new RuntimeException("Failed to update list", e);
+        }
+        return true;
+    }
 }

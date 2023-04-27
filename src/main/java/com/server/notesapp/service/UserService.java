@@ -10,10 +10,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.util.Streamable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,7 +72,7 @@ public class UserService {
             userRepo.save(user);
 
         } catch (DataAccessException e) {
-            throw new RuntimeException("Failed to save user to database", e);
+            throw new RuntimeException("Failed to save user", e);
         }
 
         return true;
@@ -83,8 +83,15 @@ public class UserService {
         return validator.isValid(email);
     }
 
-    public void deleteUser(int userId){
-        userRepo.deleteById(userId);
+    public boolean deleteUser(User user){
+        try {
+            userRepo.deleteById(user.getId());
+        } catch (Exception e){
+            throw new RuntimeException("Failed to delete user", e);
+        }
+        return true;
+
+
     }
 
     public List<User> getAllUsers(){
@@ -95,9 +102,5 @@ public class UserService {
         LOGGER.log(Level.INFO, "After findAll() method call");
         LOGGER.log(Level.INFO, "Users: {0}", users);
         return users;
-    }
-
-    public Optional<User> getUserByEmail(String email) {
-        return userRepo.findByEmail(email);
     }
 }

@@ -13,7 +13,7 @@ public class List {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private int id;
-    private int ownerId;
+    private Integer id;
+    private Integer ownerId;
     private String title;
 }

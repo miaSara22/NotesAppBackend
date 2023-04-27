@@ -15,6 +15,6 @@ public interface INoteRepo extends JpaRepository<Note, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE notes SET owner_id = :ownerId WHERE note_id = :noteId", nativeQuery = true)
-    void setNoteOwnerId(@Param("ownerId") int ownerId, @Param("noteId") int noteId);
+    @Query(value = "Update notes SET title = :noteTitle, description = :noteDesc WHERE id = :noteId", nativeQuery = true)
+    void updateNote(@Param("noteTitle") String title,@Param("noteDesc") String noteDesc, @Param("noteId") Integer noteId);
 }

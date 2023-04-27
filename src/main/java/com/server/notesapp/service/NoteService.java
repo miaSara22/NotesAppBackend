@@ -1,7 +1,6 @@
 package com.server.notesapp.service;
 
 import com.server.notesapp.model.Note;
-import com.server.notesapp.repository.IListRepo;
 import com.server.notesapp.repository.INoteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NoteService {
@@ -17,23 +15,24 @@ public class NoteService {
     @Autowired
     public INoteRepo noteRepo;
 
-    @Autowired
-    public IListRepo listRepo;
 
-
-    public boolean saveNote(Note note, int ownerId){
+    public boolean saveNote(Note note){
         try {
-            Optional<com.server.notesapp.model.List> owner = listRepo.findById(ownerId);
-
+            noteRepo.save(note);
 
         } catch (Exception e) {
             throw new RuntimeException("Error saving note to database", e);
         }
-        return false;
+        return true;
     }
 
-    public void deleteNote(int noteId){
-        noteRepo.deleteById(noteId);
+    public boolean deleteNote(Note note){
+        try {
+            noteRepo.deleteById(note.getId());
+        } catch (Exception e){
+            throw new RuntimeException("Failed to remove list from database", e);
+        }
+        return true;
     }
 
     public List<Note> getNotes(int ownerId){
@@ -41,5 +40,14 @@ public class NoteService {
         Streamable.of(noteRepo.findByOwnerId(ownerId))
                 .forEach(notes::add);
         return notes;
+    }
+
+    public boolean updateNote(Note note){
+        try {
+            noteRepo.updateNote(note.getTitle(), note.getDescription(), note.getId());
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating note", e);
+        }
+        return true;
     }
 }
