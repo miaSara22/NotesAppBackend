@@ -3,6 +3,8 @@ package com.server.notesapp.service;
 import com.server.notesapp.model.LoginRequest;
 import com.server.notesapp.model.Role;
 import com.server.notesapp.model.User;
+import com.server.notesapp.repository.IListRepo;
+import com.server.notesapp.repository.INoteRepo;
 import com.server.notesapp.repository.IUserRepo;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,13 @@ public class UserService {
 
     @Autowired
     private IUserRepo userRepo;
+
+    @Autowired
+    private IListRepo listRepo;
+
+    @Autowired
+    private INoteRepo noteRepo;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -86,6 +95,14 @@ public class UserService {
     public boolean deleteUser(User user){
         try {
             userRepo.deleteById(user.getId());
+
+            List<com.server.notesapp.model.List> lists = listRepo.findByOwnerId(user.getId());
+            for (com.server.notesapp.model.List list : lists) {
+                    listRepo.delete(list);
+                    noteRepo.deleteNotes(list.getId());
+
+                }
+
         } catch (Exception e){
             throw new RuntimeException("Failed to delete user", e);
         }
@@ -102,5 +119,37 @@ public class UserService {
         LOGGER.log(Level.INFO, "After findAll() method call");
         LOGGER.log(Level.INFO, "Users: {0}", users);
         return users;
+    }
+
+    public boolean updateUserImage(Integer userId, String image) {
+        try {
+            userRepo.updateUserImage(userId, image);
+        } catch (Exception e){
+            throw new RuntimeException("Failed to save image", e);
+        }
+        return true;
+    }
+
+    public boolean deleteUserImage(Integer userId) {
+        try {
+            userRepo.deleteUserImage(userId);
+        } catch (Exception e){
+            throw new RuntimeException("Failed to delete image", e);
+        }
+        return true;
+    }
+
+    public String getUserImageIfExists(Integer userId) {
+        try {
+            String userImage = userRepo.getImageById(userId);
+            if (userRepo.findById(userId).isPresent() && userImage != null) {
+                return userImage;
+
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to find user image", e);
+        }
     }
 }

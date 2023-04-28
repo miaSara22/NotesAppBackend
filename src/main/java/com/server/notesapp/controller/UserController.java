@@ -62,7 +62,7 @@ public class UserController {
     public ResponseEntity<ResultResponse> saveUser(@RequestBody User user) {
 
         boolean success = userService.saveUser(user);
-        String message = success ? "User registered successfully" : userService.wrongCredentialsMessage;
+        String message = success ? "User registered successfully, Please login :)" : userService.wrongCredentialsMessage;
         ResultResponse resultResponse = new ResultResponse(success, message);
 
         if (!success) {
@@ -87,5 +87,38 @@ public class UserController {
             return new ResponseEntity<>(resultResponse, HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateUserImage/{userId}")
+    public ResponseEntity<ResultResponse> updateUserImage(@PathVariable Integer userId, @RequestBody String image){
+
+        boolean success = userService.updateUserImage(userId, image);
+        String message = success ? "User image saved successfully" : "Failed to save image";
+        ResultResponse resultResponse = new ResultResponse(success, message);
+
+        if (!success) {
+            return new ResponseEntity<>(resultResponse, HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+
+    }
+
+    @PutMapping("/deleteUserImage/{userId}")
+    public ResponseEntity<ResultResponse> deleteUserImage(@PathVariable Integer userId){
+
+        boolean success = userService.deleteUserImage(userId);
+        String message = success ? "User image deleted successfully" : "Failed to delete image";
+        ResultResponse resultResponse = new ResultResponse(success, message);
+
+        if (!success) {
+            return new ResponseEntity<>(resultResponse, HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(resultResponse, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/getUserImage/{userId}")
+    public String getUserImage(@PathVariable Integer userId){
+         return userService.getUserImageIfExists(userId);
     }
 }
