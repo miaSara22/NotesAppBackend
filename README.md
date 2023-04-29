@@ -10,8 +10,9 @@ The Notes App Server is a backend server for the Notes App Android client that i
 
 ## Getting Started
 ```bash
-# 1. Clone the repository onto your local machine:
+1. Clone the repository onto your local machine:
 git clone https://github.com/miaSara22/NotesAppBackend.git
+ ```
 
 2. Customize the MySQL username and password in the application.properties file if needed.
 
