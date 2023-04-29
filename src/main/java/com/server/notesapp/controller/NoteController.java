@@ -20,7 +20,7 @@ public class NoteController {
     public ResponseEntity<ResultResponse> saveNote(@RequestBody Note note){
 
         boolean success = noteService.saveNote(note);
-        String message = success ? "Note saved successfully" : "Failed to save note";
+        String message = success ? "Note saved successfully" : noteService.wrongCredentialsMessage;
         ResultResponse resultResponse = new ResultResponse(success, message);
 
         if (!success) {
@@ -50,7 +50,7 @@ public class NoteController {
     @PostMapping("/updateNote")
     public ResponseEntity<ResultResponse> updateNote(@RequestBody Note note){
         boolean success = noteService.updateNote(note);
-        String message = success ? "Note updated successfully" : "Failed to update note";
+        String message = success ? "Note updated successfully" : noteService.wrongCredentialsMessage;
         ResultResponse resultResponse = new ResultResponse(success, message);
 
         if (!success) {

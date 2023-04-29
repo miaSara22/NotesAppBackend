@@ -18,7 +18,7 @@ public class ListController {
     public ResponseEntity<ResultResponse> saveList(@RequestBody List list){
 
         boolean success = listService.saveList(list);
-        String message = success ? "List saved successfully" : "Failed to save list";
+        String message = success ? "List saved successfully" : listService.wrongCredentialsMessage;
         ResultResponse resultResponse = new ResultResponse(success, message);
         if (!success) {
             return new ResponseEntity<>(resultResponse, HttpStatus.CONFLICT);
@@ -47,7 +47,7 @@ public class ListController {
     public ResponseEntity<ResultResponse> updateList(@RequestBody List list){
 
         boolean success = listService.updateList(list);
-        String message = success ? "List updated successfully" : "Failed to update list";
+        String message = success ? "List updated successfully" : listService.wrongCredentialsMessage;
         ResultResponse resultResponse = new ResultResponse(success, message);
 
         if (!success) {

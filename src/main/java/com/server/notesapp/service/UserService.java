@@ -12,7 +12,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.util.Streamable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -71,7 +70,17 @@ public class UserService {
         } else if (user.getFullName().isEmpty() || user.getFullName() == null) {
             wrongCredentialsMessage = "Name field cannot be empty";
             return false;
+        } else if (user.getEmail().length() > 200) {
+            wrongCredentialsMessage = "Email field cannot be longer than 200 chars";
+            return false;
+        } else if (user.getPwd().length() > 50) {
+            wrongCredentialsMessage = "Password field cannot be longer than 50 chars";
+            return false;
+        } else if (user.getFullName().length() > 50) {
+            wrongCredentialsMessage = "Name field cannot be longer than 50 chars";
+            return false;
         }
+
 
         String hashedPassword = passwordEncoder.encode(user.getPwd());
         user.setPwd(hashedPassword);

@@ -30,7 +30,11 @@ public class ListService {
         if (list.getTitle().isEmpty()) {
             wrongCredentialsMessage = "List name cannot be empty";
             return false;
+        } else if (list.getTitle().length() > 15) {
+            wrongCredentialsMessage = "List name cannot be longer than 15 chars";
+            return false;
         }
+
         try {
             listRepo.save(list);
 
@@ -58,6 +62,16 @@ public class ListService {
     }
 
     public boolean updateList(List list){
+
+        if (list.getTitle().length() > 15) {
+            wrongCredentialsMessage = "List name cannot be longer than 15 chars";
+            return false;
+
+        } else if (list.getTitle().isEmpty()) {
+            wrongCredentialsMessage = "List name cannot be empty";
+            return false;
+        }
+
         try {
             listRepo.updateList(list.getTitle(), list.getId());
         }catch (Exception e){

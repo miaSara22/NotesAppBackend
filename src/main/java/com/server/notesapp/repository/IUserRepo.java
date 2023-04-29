@@ -29,4 +29,5 @@ public interface IUserRepo extends JpaRepository<User, Integer> {
 
     @Query(value = "SELECT image FROM users WHERE id = :userId", nativeQuery = true)
     String getImageById(@Param("userId") Integer userId);
+
 }
