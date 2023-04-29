@@ -79,8 +79,10 @@ public class UserService {
         } else if (user.getFullName().length() > 50) {
             wrongCredentialsMessage = "Name field cannot be longer than 50 chars";
             return false;
+        } else if (user.getPwd().length() < 8) {
+            wrongCredentialsMessage = "Password must contain at least 8 chars";
+            return false;
         }
-
 
         String hashedPassword = passwordEncoder.encode(user.getPwd());
         user.setPwd(hashedPassword);
