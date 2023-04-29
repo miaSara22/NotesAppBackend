@@ -9,8 +9,9 @@ The Notes App Server is a backend server for the Notes App Android client that i
 - IntelliJ IDEA
 
 ## Getting Started
-```bash
+
 1. Clone the repository onto your local machine:
+```bash
 git clone https://github.com/miaSara22/NotesAppBackend.git
  ```
 
